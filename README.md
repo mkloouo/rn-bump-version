@@ -1,12 +1,12 @@
-# react-native-cli-bump-version
+# rn-bump-version
 
 A **simple** react-native cli plugin to bump versions at platform files
 
 ## Install
 
-`npm i --save-dev react-native-cli-bump-version`
+`npm i --save-dev rn-bump-version`
 
-`yarn add -D react-native-cli-bump-version`
+`yarn add -D rn-bump-version`
 
 ## Usage
 
@@ -103,7 +103,7 @@ the `Info.plist` file has `MARKETING_VERSION` instead of SemVer string:
 ### Mention
 
 I tried to find a tool that did this before starting it:
- 
+
  * [rnbv](https://github.com/llotheo/react-native-bump-version) inspired my initial sources
  * [react-native-version](https://github.com/stovmascript/react-native-version) actually does what I was
- looking for, but I already had written the tool, so I just published it anyway. 
+ looking for, but I already had written the tool, so I just published it anyway.
