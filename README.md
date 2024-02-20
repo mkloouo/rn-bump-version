@@ -1,4 +1,4 @@
-# rn-bump-version
+# rn-bump-version (all credit to [Grohden/react-native-cli-bump-version](https://github.com/Grohden/react-native-cli-bump-version))
 
 A **simple** react-native cli plugin to bump versions at platform files
 
@@ -16,7 +16,9 @@ you can call:
 ```shell script
 npx react-native bump-version --type patch
 ```
+
 That should produce this:
+
 ```shell script
 iOS project.pbxproj code: 24 -> 25
 Android build.gradle code: 23 -> 24
@@ -28,19 +30,17 @@ package.json: 1.10.6 -> 1.10.7
 The plugin updates and write the output listed files, and it's up to you to
 commit them.
 
-
 Tip: I usually create a script entry for the command, since it tends to be long:
 
 ```json
 {
-    "scripts": {
-        "bump": "npx react-native bump-version --skip-semver-for android"
-    }
+  "scripts": {
+    "bump": "npx react-native bump-version --skip-semver-for android"
+  }
 }
 ```
 
 That way you can invoke it like: `yarn bump --type patch`
-
 
 ## Flags
 
@@ -55,11 +55,13 @@ Options:
   --skip-code-for [android|ios|all]    Skips bump version codes for specified platform
   --semver                             Pass release version if known. Overwrites calculated SemVer. Optional.
   -h, --help                           output usage information
+  --reset-build                        Resets build number to 1
 ```
 
 ### Recommendations
 
 #### Use gradle for SemVer sync
+
 Android can handle automatically semantic version sync with `package.json`:
 
 ```groovy
@@ -104,6 +106,6 @@ the `Info.plist` file has `MARKETING_VERSION` instead of SemVer string:
 
 I tried to find a tool that did this before starting it:
 
- * [rnbv](https://github.com/llotheo/react-native-bump-version) inspired my initial sources
- * [react-native-version](https://github.com/stovmascript/react-native-version) actually does what I was
- looking for, but I already had written the tool, so I just published it anyway.
+- [rnbv](https://github.com/llotheo/react-native-bump-version) inspired my initial sources
+- [react-native-version](https://github.com/stovmascript/react-native-version) actually does what I was
+  looking for, but I already had written the tool, so I just published it anyway.
