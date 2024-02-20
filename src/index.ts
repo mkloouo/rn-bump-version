@@ -9,6 +9,7 @@ type Platforms = "android" | "ios" | "all";
 type Configs = {
   type?: SemVer;
   semver?: string;
+  resetBuild?: boolean;
   skipSemVerFor: Platforms[];
   skipCodeFor: Platforms[];
   root: string;
@@ -71,7 +72,10 @@ abstract class BaseFileManager {
   private readonly basePath: () => string;
   protected content: string | null = null;
 
-  constructor(basePath: () => string) {
+  constructor(
+    basePath: () => string,
+    protected readonly resetBuild: boolean = false
+  ) {
     this.basePath = basePath;
   }
 
@@ -95,7 +99,7 @@ class PBXManager extends BaseFileManager {
     const currentFile = this.read();
     const codeRegex = /CURRENT_PROJECT_VERSION = (\d+);/g;
     const currentCode = pipe2(matchFirst(codeRegex), parseDecimal)(currentFile);
-    const nextCode = currentCode + 1;
+    const nextCode = this.resetBuild ? 1 : currentCode + 1;
 
     this.content = replace(
       codeRegex,
@@ -134,7 +138,7 @@ class BuildGradleManager extends BaseFileManager {
 
     const versionMatch = matchFirst(codeExp)(currentFile);
     const current = parseDecimal(versionMatch);
-    const next = current + 1;
+    const next = this.resetBuild ? 1 : current + 1;
 
     if (isNaN(next)) {
       throw new Error(`Invalid versionCode version parsed (${versionMatch})`);
@@ -213,11 +217,11 @@ class ProjectFilesManager {
   readonly packageJSON: PackageJSONManager;
 
   constructor(configs: Configs) {
-    const { root, pbxprojPath, buildGradlePath } = configs;
+    const { root, pbxprojPath, buildGradlePath, resetBuild } = configs;
 
     this.configs = configs;
-    this.buildGradle = new BuildGradleManager(buildGradlePath);
-    this.pbx = new PBXManager(pbxprojPath);
+    this.buildGradle = new BuildGradleManager(buildGradlePath, resetBuild);
+    this.pbx = new PBXManager(pbxprojPath, resetBuild);
     this.packageJSON = new PackageJSONManager(() =>
       path.join(root, "package.json")
     );
@@ -323,6 +327,7 @@ export const versioner = (
     skipSemverFor?: string;
     semver?: string;
     type?: string;
+    resetBuild?: boolean;
   }
 ) => {
   if (cliArgs.skipCodeFor === "all" && cliArgs.skipSemverFor === "all") {
@@ -380,5 +385,6 @@ export const versioner = (
     skipSemVerFor: cliArgs.skipSemverFor
       ? (cliArgs.skipSemverFor.split(" ") as Platforms[])
       : [],
+    resetBuild: cliArgs.resetBuild,
   });
 };

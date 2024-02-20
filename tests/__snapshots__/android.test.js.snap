@@ -26,6 +26,38 @@ exports[`preserve quotes style 1`] = `
 "
 `;
 
+exports[`resets to 1 build number when changing semver 1`] = `
+"android {
+    defaultConfig {
+        versionCode 1
+        versionName \\"1.0.1\\"
+    }
+}
+"
+`;
+
+exports[`resets to 1 build number when changing semver 2`] = `
+Object {
+  "version": "1.0.1",
+}
+`;
+
+exports[`resets to 1 build number when skipping 1`] = `
+"android {
+    defaultConfig {
+        versionCode 1
+        versionName \\"1.0.0\\"
+    }
+}
+"
+`;
+
+exports[`resets to 1 build number when skipping 2`] = `
+Object {
+  "version": "1.0.0",
+}
+`;
+
 exports[`skip semVer when asked 1`] = `
 "android {
     defaultConfig {

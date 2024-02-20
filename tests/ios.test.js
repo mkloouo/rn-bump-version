@@ -7,6 +7,7 @@ const makeDefaultManager = ({
     skipSemverFor = "android",
     skipCodeFor = "android",
     pbxFileName,
+    resetBuild = false,
 } = {}) =>
     versioner({
         root: path.join(__dirname, "ios"),
@@ -24,6 +25,7 @@ const makeDefaultManager = ({
         semver,
         skipSemverFor,
         skipCodeFor,
+        resetBuild
     });
 
 test("successfully bump version (pre 0.69.x)", () => {
@@ -51,4 +53,24 @@ test("direct set semver string", () => {
 
     expect(manager.pbx.content).toMatchSnapshot();
     expect(manager.packageJSON.content).toMatchSnapshot();
+});
+
+test("resets to 1 build number when changing semver", () => {
+  const manager = makeDefaultManager({
+    type: "patch",
+    resetBuild: true,
+  }).dryRun();
+
+  expect(manager.pbx.content).toMatchSnapshot();
+  expect(manager.packageJSON.content).toMatchSnapshot();
+});
+
+test("resets to 1 build number when skipping", () => {
+  const manager = makeDefaultManager({
+    resetBuild: true,
+    skipSemverFor: "all",
+  }).dryRun();
+
+  expect(manager.pbx.content).toMatchSnapshot();
+  expect(manager.packageJSON.content).toMatchSnapshot();
 });

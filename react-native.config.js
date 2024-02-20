@@ -1,5 +1,4 @@
 const { versioner } = require("./lib/index");
-const path = require("path");
 
 module.exports = {
     commands: [{
@@ -23,6 +22,10 @@ module.exports = {
             {
                 name: "--skip-code-for [android|ios|all]",
                 description: "Skips bump version codes for specified platform",
+            },
+            {
+                name: "--reset-build",
+                description: "Resets build number to 1",
             },
         ],
     }],
